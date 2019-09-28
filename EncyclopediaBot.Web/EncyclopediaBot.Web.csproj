@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'MultiTurnPromptBot' ">
+    <StartAction>Project</StartAction>
+    <ApplicationURL>http://localhost:3978/</ApplicationURL>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.5.1" />
+    <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.5.1" />
+    <PackageReference Include="Microsoft.Bot.Builder.AI.Luis" Version="4.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="EncyclopediaBot.Logic\obj\project.assets.json" />
+    <Content Remove="EncyclopediaBot.Logic\obj\EncyclopediaBot.Logic.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\Search\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="EncyclopediaBot.Logic\ILogger.cs" />
+    <Compile Remove="EncyclopediaBot.Logic\LevensteinDistance.cs" />
+    <Compile Remove="EncyclopediaBot.Logic\Response.cs" />
+    <Compile Remove="EncyclopediaBot.Logic\NorwegianStemmer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="EncyclopediaBot.Logic\obj\EncyclopediaBot.Logic.csproj.nuget.g.targets" />
+    <None Remove="EncyclopediaBot.Logic\obj\EncyclopediaBot.Logic.csproj.nuget.g.props" />
+    <None Remove="EncyclopediaBot.Logic\obj\EncyclopediaBot.Logic.csproj.nuget.cache" />
+    <None Remove="EncyclopediaBot.Logic\obj\Debug\netcoreapp2.2\EncyclopediaBot.Logic.assets.cache" />
+    <None Remove="EncyclopediaBot.Logic\obj\Debug\netcoreapp2.2\EncyclopediaBot.Logic.csprojAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EncyclopediaBot.Logic\EncyclopediaBot.Logic.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
