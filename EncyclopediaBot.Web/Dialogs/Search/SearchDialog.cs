@@ -16,7 +16,10 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         private readonly DefinitionManager _definitionManager;
         private readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
         private const string UserInfo = "userinfo";
+        private const string TopicsData = "topics";
+
         public string Query { get; set; }
+
         public SearchDialog(DefinitionManager definitionManager, UserState userState) : base(nameof(SearchDialog))
         {
             _definitionManager = definitionManager;
@@ -32,7 +35,9 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             {
                 SearchStepAsync,
                 AskUserSearchFinishedAsync,
-                PaginateStepAsync
+                AskFollowUpTopicAsync,
+                PaginateStepAsync,
+                FinalGreetStepAsync
             }));
 
             InitialDialogId = nameof(WaterfallDialog);
@@ -63,18 +68,20 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             }
         }
 
-        private IEnumerable<Topic> FetchTopics(List<Answer> answers, Guid? requestId)
+        private List<Topic> FetchTopics(List<Answer> answers, Guid? requestId)
         {
             IEnumerable<uint> topicIds = GetUniqueTopicIDs(answers);
+            var topics = new List<Topic>();
             foreach (var snlTopic in _definitionManager.GetTopics(topicIds, requestId))
             {
-                yield return new Topic
+                topics.Add(new Topic
                 {
                     Id = snlTopic.Id,
                     Name = snlTopic.Name,
                     SubTopics = snlTopic.SubTopics.Select(st => new Topic { Name = st.Name, SubTopics = new List<Topic>(0) }).ToList()
-                };
+                });
             }
+            return topics;
         }
 
         internal IEnumerable<uint> GetUniqueTopicIDs(List<Answer> answers)
@@ -88,18 +95,24 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             return topicIds;
         }
 
-        private void PutDownVote(SearchQueryVotes searchQueryVotes, ArticleId articleInFocus)
+        private void PutDownVote(SearchState searchQueryVotes, ArticleId articleInFocus)
         {
             var downVotes = searchQueryVotes.DownVotes;
-            var vote = Vote.Down;
-            PutNewVote(downVotes, vote, articleInFocus);
+            if (downVotes != null)
+            { 
+                var vote = Vote.Down;
+                PutNewVote(downVotes, vote, articleInFocus);
+            }
         }
 
-        private void PutUpVote(SearchQueryVotes searchQueryVotes, ArticleId articleInFocus)
+        private void PutUpVote(SearchState searchQueryVotes, ArticleId articleInFocus)
         {
-            var downVotes = searchQueryVotes.UpVotes;
-            var vote = Vote.Up;
-            PutNewVote(downVotes, vote, articleInFocus);
+            var upVotes = searchQueryVotes.UpVotes;
+            if (upVotes != null)
+            {
+                var vote = Vote.Up;
+                PutNewVote(upVotes, vote, articleInFocus);
+            }
         }
 
         private void PutNewVote(List<QueryVote> votes, Vote vote, ArticleId articleInFocus)
@@ -129,8 +142,16 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             bool newValue = false;
             if (searchState.DiscardedArticles.Count > 0)
             {
-                uint deltas = ((uint)searchState.DiscardedArticles.Count - offset) / limit;
-                offset += (deltas * limit);
+                uint deltas = ((uint)searchState.DiscardedArticles.Count - offset);
+                if (limit > 0)
+                {
+                    deltas /= limit;
+                    offset += (deltas * limit);
+                } else
+                {
+                    offset = deltas;
+                }
+
                 newValue = true;
             }
 
@@ -146,23 +167,58 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         private async Task<DialogTurnResult> SearchStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             var requestId = Guid.NewGuid();
-            var answers = _definitionManager.GetAnswer(Query, requestId: requestId);
-            var lastResult = new List<Answer>(answers);
-            if (lastResult != null && lastResult.Any())
+            IEnumerable<Answer> answers = null;
+            Answer answer = null;
+            SearchState searchState = null;
+            if (stepContext.Options is SearchState)
             {
-                var answer = lastResult.FirstOrDefault();
-                // Save the query before continuing
-                var searchState = new SearchState
+                searchState = stepContext.Options as SearchState;
+                if (searchState.LastResult.Any())
                 {
-                    Query = Query,
-                    DiscardedArticles = new HashSet<ArticleId>()
-                };
+                    answers = searchState.LastResult;
+                } else
+                {
+                    if (searchState.Limit.HasValue)
+                    {
 
-                searchState.ArticleInFocus = MapAnswerToArticleId(answer);
-                searchState.LastResult = lastResult;
-                var answerCount = CountAnswers(answers);
-                searchState.Limit = answerCount;
-                searchState.DiscardedArticles = new HashSet<ArticleId>((int)answerCount);
+                        searchState.Offset += searchState.Limit.Value;
+                        if (searchState.Limit <= 100)
+                            searchState.Limit++;
+                    }
+                    else
+                    {
+                        searchState.Offset++;
+                    }
+
+                    answers = _definitionManager.GetAnswer(Query, searchState.Offset, searchState.Limit, requestId: requestId);
+                    searchState.LastResult = new List<Answer>(answers);
+                }
+
+                answer = searchState.LastResult.FirstOrDefault();
+                searchState.ArticleInFocus = new ArticleId { Id = answer.Id, Source = answer.Source };
+            } else
+            {
+                answers = _definitionManager.GetAnswer(Query, requestId: requestId);
+                var lastResult = new List<Answer>(answers);
+                if (lastResult.Any())
+                {
+                    answer = lastResult.FirstOrDefault();
+                    // Save the query before continuing
+                    searchState = new SearchState
+                    {
+                        Query = Query,
+                        DiscardedArticles = new HashSet<ArticleId>(),
+                        UpVotes = new List<QueryVote>(),
+                        DownVotes = new List<QueryVote>(),
+                        LastResult = new List<Answer>(answers),
+                        ArticleInFocus = MapAnswerToArticleId(answer),
+                        Limit = CountAnswers(answers)
+                    };
+                }
+            }
+
+            if (answers.Any())
+            {
                 stepContext.Values[UserInfo] = searchState;
 
                 // pass the answer to the user
@@ -195,40 +251,62 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             Guid? requestId = Guid.NewGuid();
             var searchState = stepContext.Values[UserInfo] as SearchState;
 
-            var userAnswered = stepContext.Result as string;
-            if (userAnswered == "ja"
-                && searchState != null
-                && searchState.LastResult != null
-                && searchState.LastResult.Any())
-            {
-                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Ok. Jeg trenger litt fler detaljer for å kunne besvare det spørsmålet."), cancellationToken);
-                var topics = FetchTopics(searchState.LastResult, requestId);
-                var choicePromptOptions = new PromptOptions
-                {
-                    Prompt = MessageFactory.Text("Hvilket emne snakker vi om?"),
-                    RetryPrompt = MessageFactory.Text("Vi er nødt til å holde oss til temaet. Vennligst velg det relevante emnet for det du leter etter."),
-                    Choices = ChoiceFactory.ToChoices(topics.Select(t => t.Name).ToList())
-                };
-
-                return await stepContext.PromptAsync(nameof(ChoicePrompt), choicePromptOptions, cancellationToken);
-            }
-
+            var userAnswered = ((FoundChoice)stepContext.Result).Value ?? string.Empty;
             if (userAnswered == "nei")
             {
-                //var conversationStateAccessor = _conversationState.CreateProperty<SearchQueryVotes>(nameof(SearchQueryVotes));
-                // ArticleId articleInFocus = searchState.ArticleInFocus;
-                // var searchQueryVotes = await conversationStateAccessor.GetAsync(stepContext.Context, () => new SearchQueryVotes(FormatQueryOrNull(searchState)));
-                // PutUpVote(searchQueryVotes, articleInFocus);
+                if (searchState != null
+                && searchState.LastResult != null
+                && searchState.LastResult.Any())
+                { 
+                    var articleInFocus = searchState.ArticleInFocus;
+                    PutDownVote(searchState, articleInFocus);
 
-                var searchQueryVotes = stepContext.Values[UserInfo] as SearchQueryVotes;
+                    searchState.DiscardedArticles.Add(articleInFocus);
+                    searchState.LastResult.RemoveAll(a => a.Id == searchState.ArticleInFocus.Id && a.Source == searchState.ArticleInFocus.Source);
+
+                    stepContext.Values[UserInfo] = searchState;
+                    if (searchState.LastResult.Any())
+                    {
+                        var topics = FetchTopics(searchState.LastResult, requestId);
+                        stepContext.Values[TopicsData] = topics;
+                        if (topics.Count > 1)
+                        {
+                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Ok. Jeg trenger litt fler detaljer for å kunne besvare det spørsmålet."), cancellationToken);
+                            var choicePromptOptions = new PromptOptions
+                            {
+                                Prompt = MessageFactory.Text("Hvilket emne snakker vi om?"),
+                                RetryPrompt = MessageFactory.Text("Vi er nødt til å holde oss til temaet. Vennligst velg det relevante emnet for det du leter etter."),
+                                Choices = ChoiceFactory.ToChoices(topics.Select(t => t.Name).ToList())
+                            };
+
+                            return await stepContext.PromptAsync(nameof(ChoicePrompt), choicePromptOptions, cancellationToken);
+                        }
+                        else
+                        {
+                            stepContext.Values[TopicsData] = new List<Topic>(0);
+                            return await stepContext.NextAsync(null, cancellationToken);
+                        }
+                    } else
+                    {
+                        stepContext.Values[TopicsData] = new List<Topic>(0);
+                        return await stepContext.NextAsync(null, cancellationToken);
+                    }
+                } else
+                {
+                    stepContext.Values[TopicsData] = new List<Topic>(0);
+                    return await stepContext.NextAsync(null, cancellationToken);
+                }
+            }else if (userAnswered == "ja")
+            {
                 var articleInFocus = searchState.ArticleInFocus;
-                PutUpVote(searchQueryVotes, articleInFocus);
-                stepContext.Values[UserInfo] = searchQueryVotes;
-
-                return await stepContext.NextAsync(null, cancellationToken);
+                PutUpVote(searchState, articleInFocus);
+                stepContext.Values[UserInfo] = searchState;
+                return await stepContext.NextAsync(new Nullable<bool>(true), cancellationToken);
             }
             else
             {
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("Vi mistet tråden her. La oss snakke om noe annet"), cancellationToken);
+
                 return await stepContext.EndDialogAsync(searchState, cancellationToken);
             }
         }
@@ -236,57 +314,35 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         private async Task<DialogTurnResult> PaginateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             Guid requestId = Guid.NewGuid();
+            if (stepContext.Result is bool? && (stepContext.Result as bool?).Value == true)
+            {
+                return await stepContext.NextAsync(new Nullable<bool>(true), cancellationToken);
+            }
 
             var searchState = stepContext.Values[UserInfo] as SearchState;
             ArticleId articleInFocus = searchState.ArticleInFocus;
 
-            var searchQueryVotes = stepContext.Values[UserInfo] as SearchQueryVotes;
-            PutDownVote(searchQueryVotes, articleInFocus);
-
-            var userAnsweredTopic = stepContext.Result as string;
-            searchState.DiscardedArticles.Add(articleInFocus);
             searchState.Offset = CalculateOffset(searchState);
-            bool hasNextQuestion = false;
-
-            List<Answer> answers = searchState.LastResult;
-            if (answers == null || answers.Count == 0)
+            
+            IEnumerable<Answer> answersInTopic = null;
+            var userChoice = stepContext.Result as FoundChoice;
+            Topic topic;
+            if (stepContext.Values.ContainsKey(TopicsData)
+                && stepContext.Values[TopicsData] is List<Topic>
+                && (topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value)) != null)
             {
-                if (string.IsNullOrEmpty(searchState.Query))
-                {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Jeg mistet spørsmålet ditt på veien. huff"), cancellationToken);
-                    // WaterfallStep always finishes with the end of the Waterfall or with another dialog, here it is the end.
-                    return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
-                }
-
-                answers = new List<Answer>(_definitionManager.GetAnswer(searchState.Query, searchState.Offset, searchState.Limit, requestId));
+                var answers = searchState.LastResult;
+                answersInTopic = FilterByTopic(answers, topic);
+                searchState.LastResult = new List<Answer>(answersInTopic);
+            }
+            else
+            {
+                answersInTopic = searchState.LastResult;
             }
 
-            Topic topic = null;
-            IEnumerable<Answer> answersInTopic = FilterByTopic(answers, topic);
-            foreach (var answer in answersInTopic)
-            {
-                var articleId = new ArticleId { Id = answer.Id, Source = answer.Source };
-                if (searchState.DiscardedArticles.Contains(articleId) == false)
-                {
-                    searchState.ArticleInFocus = articleId;
-                    searchState.LastResult = new List<Answer>(answersInTopic);
-
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text(answer.Response), cancellationToken);
-
-                    hasNextQuestion = true;
-                    break;
-                }
-            }
-
+            
             stepContext.Values[UserInfo] = searchState;
-            if (hasNextQuestion)
-            {
-                return await stepContext.ReplaceDialogAsync(nameof(SearchDialog), searchState, cancellationToken);
-
-            }
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Dette vet jeg ikke svaret på."), cancellationToken);
-            return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
+            return await stepContext.ReplaceDialogAsync(nameof(SearchDialog), searchState, cancellationToken);
         }
 
         private async Task<DialogTurnResult> FinalGreetStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -299,6 +355,10 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             else if (result.HasValue && result.Value == false)
             {
                 await stepContext.Context.SendActivityAsync(MessageFactory.Text("Leit at jeg ikke fant ut av det. Dette falt utenfor mitt domene."), cancellationToken);
+            } else
+            {
+                await stepContext.Context.SendActivityAsync(MessageFactory.Text("La oss snakke om noe annet."), cancellationToken);
+
             }
 
             // WaterfallStep always finishes with the end of the Waterfall or with another dialog, here it is the end.

@@ -31,7 +31,8 @@ namespace EncyclopediaBot.Web
                     {
                         Response = response,
                         Id = definition.Id,
-                        Source = definition.Source
+                        Source = definition.Source,
+                        TopicId = definition.TopicId
                     };
 
                     yield return answer;
@@ -46,25 +47,31 @@ namespace EncyclopediaBot.Web
             foreach (var topicId in topicIds)
             {
                 var subTaxonomy = new List<Topic>();
-                Logic.Snl.TaxonomyResult topic = _topicProvider.GetTaxonomy(topicId, requestId);
-                foreach (var ancestor in topic.taxonomy.ancestors)
+                TaxonomyResult taxonomyResult = _topicProvider.GetTaxonomy(topicId, requestId);
+                if (taxonomyResult.taxonomy != null)
                 {
-                    var t = new Topic
+                    if (taxonomyResult.taxonomy.ancestors != null)
                     {
-                        Name = topic.taxonomy.title,
-                        Id = ExtractId(ancestor.url),
-                        SubTopics = new List<Topic>(0)
+                        foreach (var ancestor in taxonomyResult.taxonomy.ancestors)
+                        {
+                            var t = new Topic
+                            {
+                                Name = ancestor.title,
+                                Id = ExtractId(ancestor.url),
+                                SubTopics = new List<Topic>(0)
+                            };
+
+                            subTaxonomy.Add(t);
+                        }
+                    }
+
+                    yield return new Topic
+                    {
+                        Name = taxonomyResult.taxonomy.title,
+                        Id = topicId,
+                        SubTopics = subTaxonomy
                     };
-
-                    subTaxonomy.Add(t);
                 }
-
-                yield return new Topic
-                {
-                    Name = topic.taxonomy.title,
-                    Id = topicId,
-                    SubTopics = subTaxonomy
-                };
             }
         }
 

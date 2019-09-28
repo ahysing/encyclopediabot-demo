@@ -61,8 +61,37 @@ namespace EncyclopediaBot.Logic.Snl
                 Id = articleId,
                 Url = article.Url,
                 SubjectTitle = article.SubjectTitle,
-                Source = source
+                Source = source,
+                TopicId = ExtractTopicId(article)
             };
+        }
+
+        const string _prefix = "http://snl.no/.taxonomy/";
+
+        const string _prefix2 = "https://snl.no/.taxonomy/";
+        private uint ExtractTopicId(Article article)
+        {
+            if (article != null && article.SubjectUrl != null)
+            {
+                uint topicId;
+
+                if (article.SubjectUrl.IndexOf(_prefix, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    string rawId = article.SubjectUrl.Substring(_prefix.Length);
+                    if (uint.TryParse(rawId, out topicId))
+                    {
+                        return topicId;
+                    }
+                } else if (article.SubjectUrl.IndexOf(_prefix2, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    string rawId = article.SubjectUrl.Substring(_prefix2.Length);
+                    if (uint.TryParse(rawId, out topicId))
+                    {
+                        return topicId;
+                    }
+                }
+            }
+            return 0;
         }
 
         internal string TrimStartSpaceAndComma(string endText)

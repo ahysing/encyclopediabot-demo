@@ -13,5 +13,9 @@ namespace EncyclopediaBot.Web.Model.Search
 
         public HashSet<ArticleId> DiscardedArticles { get; set; }
         public ArticleId ArticleInFocus { get; set; }
+
+        // User Feedback statistics below
+        public List<QueryVote> DownVotes { get; set; }
+        public List<QueryVote> UpVotes { get;  set; }
     }
 }
