@@ -528,3 +528,8 @@ MigrationBackup/
 
 # End of https://www.gitignore.io/api/code,csharp,visualstudio,visualstudiocode
 
+EncyclopediaBot.Web/appsettings.json
+EncyclopediaBot.Web/appsettings.Development.json
+
+./EncyclopediaBot.Web/appsettings.json
+./EncyclopediaBot.Web/appsettings.Development.json
