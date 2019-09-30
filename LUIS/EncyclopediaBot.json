@@ -1,0 +1,2807 @@
+{
+  "luis_schema_version": "4.0.0",
+  "versionId": "0.1",
+  "name": "EncyclopediaBot",
+  "desc": "Spørsmål og svar bot. Boten kan det meste, og er sikkelig god på kjente personer",
+  "culture": "de-de",
+  "tokenizerVersion": "1.0.2",
+  "intents": [{
+      "name": "Define"
+    },
+    {
+      "name": "FindCallerByPhoneNumber"
+    },
+    {
+      "name": "GetBirthDate"
+    },
+    {
+      "name": "GetBirthPlace"
+    },
+    {
+      "name": "GetDeathDate"
+    },
+    {
+      "name": "GetDeathPlace"
+    },
+    {
+      "name": "GetGender"
+    },
+    {
+      "name": "None"
+    }
+  ],
+  "entities": [{
+      "name": "Adjective",
+      "roles": [],
+      "hierarchyChildren": []
+    },
+    {
+      "name": "CompanyName",
+      "roles": [],
+      "hierarchyChildren": []
+    },
+    {
+      "name": "FirstName",
+      "roles": [
+        "NamePart"
+      ],
+      "hierarchyChildren": []
+    },
+    {
+      "name": "LastName",
+      "roles": [],
+      "hierarchyChildren": []
+    },
+    {
+      "name": "PersonName.Nick",
+      "roles": [],
+      "hierarchyChildren": []
+    }
+  ],
+  "composites": [{
+    "name": "PersonName",
+    "children": [
+      "FirstName",
+      "LastName",
+      "PersonName.Prefix",
+      "PersonName.Nick",
+      "NameInitial"
+    ],
+    "roles": []
+  }],
+  "closedLists": [{
+      "name": "DayOfWeek_No",
+      "subLists": [{
+          "canonicalForm": "mandag",
+          "list": [
+            "mandager"
+          ]
+        },
+        {
+          "canonicalForm": "tirsdag",
+          "list": [
+            "tirsdager"
+          ]
+        },
+        {
+          "canonicalForm": "onsdag",
+          "list": [
+            "onsdager"
+          ]
+        },
+        {
+          "canonicalForm": "torsdag",
+          "list": [
+            "torsdager"
+          ]
+        },
+        {
+          "canonicalForm": "fredag",
+          "list": [
+            "fredager"
+          ]
+        },
+        {
+          "canonicalForm": "lørdag",
+          "list": [
+            "lørdager"
+          ]
+        },
+        {
+          "canonicalForm": "søndag",
+          "list": [
+            "søndager"
+          ]
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "Month_No",
+      "subLists": [{
+          "canonicalForm": "januar",
+          "list": []
+        },
+        {
+          "canonicalForm": "februar",
+          "list": []
+        },
+        {
+          "canonicalForm": "mars",
+          "list": []
+        },
+        {
+          "canonicalForm": "april",
+          "list": []
+        },
+        {
+          "canonicalForm": "mai",
+          "list": []
+        },
+        {
+          "canonicalForm": "juni",
+          "list": []
+        },
+        {
+          "canonicalForm": "juli",
+          "list": []
+        },
+        {
+          "canonicalForm": "august",
+          "list": []
+        },
+        {
+          "canonicalForm": "september",
+          "list": []
+        },
+        {
+          "canonicalForm": "oktober",
+          "list": []
+        },
+        {
+          "canonicalForm": "november",
+          "list": []
+        },
+        {
+          "canonicalForm": "desember",
+          "list": []
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "PersonName.Prefix",
+      "subLists": [{
+          "canonicalForm": "herr",
+          "list": []
+        },
+        {
+          "canonicalForm": "frøken",
+          "list": []
+        },
+        {
+          "canonicalForm": "fru",
+          "list": []
+        },
+        {
+          "canonicalForm": "herr dr.",
+          "list": []
+        },
+        {
+          "canonicalForm": "frau dr.",
+          "list": []
+        },
+        {
+          "canonicalForm": "frau",
+          "list": []
+        },
+        {
+          "canonicalForm": "dr.",
+          "list": []
+        },
+        {
+          "canonicalForm": "mr.",
+          "list": []
+        },
+        {
+          "canonicalForm": "mrs.",
+          "list": []
+        },
+        {
+          "canonicalForm": "kong",
+          "list": []
+        },
+        {
+          "canonicalForm": "dronning",
+          "list": []
+        },
+        {
+          "canonicalForm": "kronprins",
+          "list": []
+        },
+        {
+          "canonicalForm": "kronprinsesse",
+          "list": []
+        },
+        {
+          "canonicalForm": "dj",
+          "list": [
+            "disk jockey",
+            "DJ"
+          ]
+        },
+        {
+          "canonicalForm": "lady",
+          "list": []
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "patternAnyEntities": [{
+    "name": "Concept",
+    "roles": [
+      "ConceptToDefine"
+    ],
+    "explicitList": []
+  }],
+  "regex_entities": [{
+      "name": "NameInitial",
+      "regexPattern": "([A-Z]|Æ|Ø|Å|[a-z]|æ|ø|å)\\.{0,1}",
+      "roles": []
+    },
+    {
+      "name": "PhoneNumber_No",
+      "regexPattern": "(\\+47|0047){0,1}\\s*([1-9][0-9]\\s+[0-9]{2}\\s+[0-9]{2}\\s+[0-9]{2}|[1-9][0-9]{2}\\s+[0-9]{2}\\s+[0-9]{3})",
+      "roles": []
+    }
+  ],
+  "prebuiltEntities": [],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [{
+      "pattern": "hva er definisjonen av {Concept}?",
+      "intent": "Define"
+    },
+    {
+      "pattern": "hvem er {PersonName}",
+      "intent": "Define"
+    },
+    {
+      "pattern": "har peppes pizza fortsatt nummer {PhoneNumber_No}?",
+      "intent": "FindCallerByPhoneNumber"
+    },
+    {
+      "pattern": "hva er {Concept}",
+      "intent": "Define"
+    },
+    {
+      "pattern": "hvem er {PersonName}?",
+      "intent": "Define"
+    },
+    {
+      "pattern": "hva er {Adjective} {Concept}?",
+      "intent": "Define"
+    },
+    {
+      "pattern": "definer {Concept}.",
+      "intent": "Define"
+    },
+    {
+      "pattern": "hvor ble {PersonName} drept?",
+      "intent": "GetDeathPlace"
+    },
+    {
+      "pattern": "hvor døde {PersonName}?",
+      "intent": "GetBirthPlace"
+    },
+    {
+      "pattern": "hvor ble {PersonName} født?",
+      "intent": "GetBirthPlace"
+    },
+    {
+      "pattern": "når døde {PersonName}?",
+      "intent": "GetDeathDate"
+    },
+    {
+      "pattern": "hvem var {PersonName}?",
+      "intent": "Define"
+    }
+  ],
+  "utterances": [{
+      "text": "+47 815 49 300",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "1",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "2",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "3",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "4",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "5",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "9",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "bus",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "car",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ddd",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "definer hypotenus",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "definer pubertet",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "den kalde krigen",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "er den sittende politisjefen kvinne eller mann?",
+      "intent": "GetGender",
+      "entities": []
+    },
+    {
+      "text": "er direktøren i equinor kvinne eller mann?",
+      "intent": "GetGender",
+      "entities": []
+    },
+    {
+      "text": "er erna solberg kvinne eller mann?",
+      "intent": "GetGender",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 3,
+          "endPos": 6
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 3,
+          "endPos": 14
+        },
+        {
+          "entity": "LastName",
+          "startPos": 8,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "er sjefen i telenor kvinne eller mann?",
+      "intent": "GetGender",
+      "entities": []
+    },
+    {
+      "text": "er skavlan kvinne eller mann?",
+      "intent": "GetGender",
+      "entities": [{
+        "entity": "LastName",
+        "startPos": 3,
+        "endPos": 9
+      }]
+    },
+    {
+      "text": "er statsministeren mann eller kvinne?",
+      "intent": "GetGender",
+      "entities": []
+    },
+    {
+      "text": "har peppes pizza fortsatt nummer 22 22 55 55?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hva er bergen?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er berlinmuren?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er dagens outfit?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hva er definisjonen av fokksnø?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er fc københavn?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er fredrik wilhelm?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "PersonName",
+        "startPos": 7,
+        "endPos": 22
+      }]
+    },
+    {
+      "text": "hva er helge ingstad?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er hotell?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er kubiske kurver?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er ludvig bergh?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "FirstName",
+        "startPos": 7,
+        "endPos": 19
+      }]
+    },
+    {
+      "text": "hva er pubertet?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er rock and roll hall of fame?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva er sofagris?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hva skjer nå?",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "hva var frank zappa?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hve ringer meg fra 22 22 55 55 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem er +47 815 49 300",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem er cat stevens?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er dj tiesto?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 16
+        },
+        {
+          "entity": "PersonName.Nick",
+          "startPos": 11,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "hvem er dj tiësto?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 16
+        },
+        {
+          "entity": "PersonName.Nick",
+          "startPos": 11,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "hvem er donald duck?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er donald?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "FirstName",
+        "startPos": 8,
+        "endPos": 13
+      }]
+    },
+    {
+      "text": "hvem er drillo?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 8,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "hvem er egil olsen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvem er frank sinatra?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem er frank zappa",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er frank zappa?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er frank zappa+",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er franz ferdinand?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem er gro harlem brundtland?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 28
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 19,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "hvem er havard flatland?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem er helge ingstad?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem er henki kolstad?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem er ingrid berg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er ivar aasen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvem er jakob ingebrigtsen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 25
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "hvem er lady diana?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvem er lan berg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 15
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 15
+        }
+      ]
+    },
+    {
+      "text": "hvem er lan marie berg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 16
+        },
+        {
+          "entity": "LastName",
+          "startPos": 18,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem er lan marie nguyen berg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 28
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 12,
+          "endPos": 16
+        },
+        {
+          "entity": "LastName",
+          "startPos": 18,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 25,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "hvem er leif juster?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem er ole ivars?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 16
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "hvem er otto sverdrup?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem er per spook",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 16
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 16
+        }
+      ]
+    },
+    {
+      "text": "hvem er rune rudberg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvem er the presidents of the united states of america?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "hvem er william shakespare?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 25
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "hvem er yngve hågensen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem ringer fra +47 46 96 16 27?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer fra 22 22 55 55?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 1881 99 99 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 22 22 55 55",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 22 22 55 55 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 22 22 55 55 =",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 22 22 55 55?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 46 96 16 27?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 66 84 67 91 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 81 54 93 00?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 815 49 300?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 91 54 93 00?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 920 43 521 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 93 20 66 38 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 932 06 638 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fra 99 99 99 99 ?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem ringer meg fraq 46 96 16 27?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvem var adolf erhardt bjerke?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 28
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 23,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "hvem var aleksander dahle oen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 18
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 28
+        },
+        {
+          "entity": "LastName",
+          "startPos": 20,
+          "endPos": 24
+        },
+        {
+          "entity": "LastName",
+          "startPos": 26,
+          "endPos": 28
+        }
+      ]
+    },
+    {
+      "text": "hvem var charlie chaplin?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvem var cornelius vreeswijk?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 17
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 27
+        },
+        {
+          "entity": "LastName",
+          "startPos": 19,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "hvem var diana ross?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem var drillo?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "PersonName.Nick",
+        "startPos": 9,
+        "endPos": 14
+      }]
+    },
+    {
+      "text": "hvem var eddie izzard?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var einar gerhardsen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 24
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 24
+        }
+      ]
+    },
+    {
+      "text": "hvem var frank zappa",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvem var frank zappa?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvem var frank zappa?¨",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvem var gaius julius caesar",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 27
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 15,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 22,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "hvem var gro harlem brundtland?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 29
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 20,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "hvem var helge ingstad?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem var helge instad?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var hellen keller?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem var hjallis?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "PersonName.Nick",
+        "startPos": 9,
+        "endPos": 15
+      }]
+    },
+    {
+      "text": "hvem var ivar aasen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem var jan tore sanner?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 16
+        },
+        {
+          "entity": "LastName",
+          "startPos": 18,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvem var julius cæsar",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var leif juster?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvem var ludvig fredrik ?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem var michael jackson?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvem var mona lisa?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvem var mr hyde?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 10
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "LastName",
+          "startPos": 12,
+          "endPos": 15
+        }
+      ]
+    },
+    {
+      "text": "hvem var ole ivars?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 17
+        },
+        {
+          "entity": "LastName",
+          "startPos": 13,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvem var otto jespersen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem var otto sverdrup?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem var rune rudberg?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var sonja hennie",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var sonja hennie?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var sonja hennie=",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvem var steve jobs?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvem var sylvi listhaug?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem var sylvi listhuag?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvem var thomas hysing?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvem var william hamelet?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvem var william shakespare?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "hvem var yngve haagensen?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvilet kjønn hadde jesus?",
+      "intent": "GetGender",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 19,
+          "endPos": 23
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 19,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvilken by kommer hans wilhelm steinfeld fra?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 18,
+          "endPos": 21
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 18,
+          "endPos": 39
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 23,
+          "endPos": 29
+        },
+        {
+          "entity": "LastName",
+          "startPos": 31,
+          "endPos": 39
+        }
+      ]
+    },
+    {
+      "text": "hvilket kjønn hadde michael jackson?",
+      "intent": "GetGender",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 20,
+          "endPos": 26
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 20,
+          "endPos": 34
+        },
+        {
+          "entity": "LastName",
+          "startPos": 28,
+          "endPos": 34
+        }
+      ]
+    },
+    {
+      "text": "hvilket kjønn har anne katrine hærland?",
+      "intent": "GetGender",
+      "entities": []
+    },
+    {
+      "text": "hvilket kjønn har erna solberg?",
+      "intent": "GetGender",
+      "entities": [{
+        "entity": "PersonName",
+        "startPos": 18,
+        "endPos": 29
+      }]
+    },
+    {
+      "text": "hvilket kjønn har henrik ibsen?",
+      "intent": "GetGender",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 18,
+          "endPos": 23
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 18,
+          "endPos": 29
+        },
+        {
+          "entity": "LastName",
+          "startPos": 25,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "hvilket kjønn har ida jackson?",
+      "intent": "GetGender",
+      "entities": [{
+        "entity": "PersonName",
+        "startPos": 18,
+        "endPos": 28
+      }]
+    },
+    {
+      "text": "hvilket kjønn har jan thomas?",
+      "intent": "GetGender",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 18,
+          "endPos": 20
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 18,
+          "endPos": 27
+        },
+        {
+          "entity": "LastName",
+          "startPos": 22,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "hvor ble andreas dreyer hysing født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 29
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 24,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "hvor ble angela merkel født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 21
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 21
+        }
+      ]
+    },
+    {
+      "text": "hvor ble drillo født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "hvor ble karl lagerfeldt født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "hvor ble leif juster født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvor ble martin linge drept?",
+      "intent": "GetDeathPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "hvor bodde ivar åsen?",
+      "intent": "GetDeathPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 11,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 11,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "hvor døde hjallis?",
+      "intent": "GetDeathPlace",
+      "entities": [{
+        "entity": "PersonName.Nick",
+        "startPos": 10,
+        "endPos": 16
+      }]
+    },
+    {
+      "text": "hvor døde ivar aasen?",
+      "intent": "GetDeathPlace",
+      "entities": []
+    },
+    {
+      "text": "hvor døde leif juster ?",
+      "intent": "GetDeathPlace",
+      "entities": []
+    },
+    {
+      "text": "hvor døde max manus?",
+      "intent": "GetDeathPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 10,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 10,
+          "endPos": 18
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 18
+        }
+      ]
+    },
+    {
+      "text": "hvor er vi nå?",
+      "intent": "None",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 9
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 12
+        }
+      ]
+    },
+    {
+      "text": "hvor var elvis prestley da han døde?",
+      "intent": "GetDeathPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 22
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "hvor var elvis prestly på slutten?",
+      "intent": "GetDeathPlace",
+      "entities": []
+    },
+    {
+      "text": "hvor vokste drillo opp?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 12,
+          "endPos": 17
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 12,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "hvorfor ringer +47 21 09 30 00 meg hele tiden?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "hvorfor ringer datteren min til 81 54 93 00 på lørdager?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "i hvilket år døde julius cæsar?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 18,
+          "endPos": 23
+        },
+        {
+          "entity": "LastName",
+          "startPos": 25,
+          "endPos": 29
+        }
+      ]
+    },
+    {
+      "text": "i hvilket år døde kong olav v?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 18,
+          "endPos": 21
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 23,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "it-historie",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ja",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "jeg blir stadig ringt fra 21 49 49 49. hvem er det?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "kan du fortelle meg hvem som har nummer +47 22 22 55 55?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "kan du fortelle meg mer om london?",
+      "intent": "Define",
+      "entities": []
+    },
+    {
+      "text": "kan du fortelle meg mer om microsoft?",
+      "intent": "Define",
+      "entities": [{
+        "entity": "CompanyName",
+        "startPos": 27,
+        "endPos": 35
+      }]
+    },
+    {
+      "text": "kan du slå opp nummer 920 43 521?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "når ble hans wilhelm steinfeldt født?",
+      "intent": "GetBirthPlace",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 11
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 30
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 13,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 21,
+          "endPos": 30
+        }
+      ]
+    },
+    {
+      "text": "når ble henrik ibsen født?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "når ble william shakespare født?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 8,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 8,
+          "endPos": 25
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 25
+        }
+      ]
+    },
+    {
+      "text": "når døde agnar mykle?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "når døde avicii ?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "når døde frank zappa?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 15,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "når døde henrik ibsen?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 20
+        },
+        {
+          "entity": "LastName",
+          "startPos": 16,
+          "endPos": 20
+        }
+      ]
+    },
+    {
+      "text": "når døde hjallis?",
+      "intent": "GetDeathDate",
+      "entities": [{
+        "entity": "PersonName.Nick",
+        "startPos": 9,
+        "endPos": 15
+      }]
+    },
+    {
+      "text": "når døde jesus?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "LastName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "når døde karl lagerfeld?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "LastName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 22
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 14,
+          "endPos": 22
+        }
+      ]
+    },
+    {
+      "text": "når døde kong olav?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 14,
+          "endPos": 17
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 14,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "når døde mona lisa?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 14,
+          "endPos": 17
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 14,
+          "endPos": 17
+        }
+      ]
+    },
+    {
+      "text": "når døde prince?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "når falt avicii fra?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "PersonName.Nick",
+          "startPos": 9,
+          "endPos": 14
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "når falt elvis fra?",
+      "intent": "GetBirthDate",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 13
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "når falt leif juster fra?",
+      "intent": "GetDeathDate",
+      "entities": [{
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 12
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 14,
+          "endPos": 19
+        },
+        {
+          "entity": "LastName",
+          "startPos": 14,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "nei",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "nei...",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "nie",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "no",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ok",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ok. takk for svar",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "pop og rock",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "ringer nav akershus fra +47 21 06 84 00?",
+      "intent": "FindCallerByPhoneNumber",
+      "entities": []
+    },
+    {
+      "text": "vhem war william shakespare?",
+      "intent": "Define",
+      "entities": [{
+          "entity": "FirstName",
+          "startPos": 9,
+          "endPos": 15
+        },
+        {
+          "entity": "PersonName",
+          "startPos": 9,
+          "endPos": 26
+        },
+        {
+          "entity": "LastName",
+          "startPos": 17,
+          "endPos": 26
+        }
+      ]
+    },
+    {
+      "text": "yes",
+      "intent": "None",
+      "entities": []
+    }
+  ],
+  "settings": []
+}
