@@ -14,7 +14,6 @@ namespace EncyclopediaBot.Web.Dialogs.Search
     public class SearchDialog : ComponentDialog
     {
         private readonly DefinitionManager _definitionManager;
-        private readonly IStatePropertyAccessor<UserProfile> _userProfileAccessor;
         private const string UserInfo = "userinfo";
         private const string TopicsData = "topics";
 
@@ -23,7 +22,6 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         public SearchDialog(DefinitionManager definitionManager, UserState userState) : base(nameof(SearchDialog))
         {
             _definitionManager = definitionManager;
-            _userProfileAccessor = userState.CreateProperty<UserProfile>("SearchDialog");
 
             // Add named dialogs to the DialogSet. These names are saved in the dialog state.
             AddDialog(new TextPrompt(nameof(TextPrompt)));

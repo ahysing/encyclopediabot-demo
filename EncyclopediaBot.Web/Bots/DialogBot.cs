@@ -56,7 +56,7 @@ namespace EncyclopediaBot.Web
     // each with dependency on distinct IBot types, this way ASP Dependency Injection can glue everything together without ambiguity.
     // The ConversationState is used by the Dialog system. The UserState isn't, however, it might have been used in a Dialog implementation,
     // and the requirement is that all BotState objects are saved at the end of a turn.
-    public class DialogBot<T> : ActivityHandler where T : Dialog 
+    public class DialogBot<T> : ActivityHandler where T : Dialog
     {
         protected readonly Dialog Dialog;
         private readonly SearchDialog _searchDialog;
@@ -66,7 +66,6 @@ namespace EncyclopediaBot.Web
 
         private LuisRecognizer _recognizer;
         private LuisSetup _luisSetup;
-        private IStatePropertyAccessor<DialogState> _searchState;
 
         public DialogBot(ConversationState conversationState, UserState userState, T dialog, ILogger<DialogBot<T>> logger, SearchDialog searchDialog, LuisSetup luisSetup)
         {
