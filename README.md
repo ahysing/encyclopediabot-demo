@@ -20,22 +20,24 @@ Noen ting må være på plass din PC eller Mac før vi kan begynne
 
 ## Oppskrift
 
-Før vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften [Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started).
-For å komme i gang med bot framework emulator trenger du programmet **ngrok**. Installasjon av ngrok varierer på forskjellige systemer.
-For MacOS gjør som i skriptet under. Installasjonen krever [homebrew](https://brew.sh)
+F√∏r vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften 
+[Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started). Microsoft refererer til programmet **ngrok** under installasjonen. For v√•rt form√•l trenger vi det ikke. Derfor anbefales det å **IKKE INSTALLERE NGROK**.
+Etter installasjon skal Bot framework settings bør inneholde
 
-```bash
-username$ brew cask install ngrok
-==> Satisfying dependencies
-==> Downloading https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip
-######################################################################## 100.0%
-==> No SHA-256 checksum defined for Cask 'ngrok', skipping verification.
-==> Installing Cask ngrok
-==> Linking Binary 'ngrok' to '/usr/local/bin/ngrok'.
-🍺  ngrok was successfully installed!
-username$ which ngrok
-/usr/local/bin/ngrok
-```
+| Alternativ                            | Verdi     |
+|---------------------------------------|-----------|
+| Path to ngrok                         |           |
+| Bypass ngrok for local addresses      | YES       |
+| Run ngrok when the emulator starts up | NO        |
+| localhost override                    | localhost |
+| Locale                                | nb-NO     |
+
+![Bot framework settings](/documentation/bot%20framework%20settings.png)
+
+## Importer LUIS-modellen
+
+Last ned en eksportert modell fra [EncyclopediaBot.json](https://github.com/vippsas/encyclopediabot-demo/tree/master/LUIS/EncyclopediaBot.json). Last opp denne modellen p√• [eu.luis.ai](https://eu.luis.ai): logg inn med en Microsoft bruker, og last opp JSON-filen fra Import New menyen
+![LUIS Import App](/documentation/import-LUIS-model.png
 
 - I terminalen git klon [Microsoft BotBuilder Samples](https://github.com/microsoft/BotBuilder-Samples)
 

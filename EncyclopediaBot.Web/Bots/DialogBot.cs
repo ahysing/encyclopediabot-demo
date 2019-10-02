@@ -105,10 +105,12 @@ namespace EncyclopediaBot.Web
             turnContext.SendActivityAsync(MessageFactory.Text(describeGreeting, describeGreeting, InputHints.AcceptingInput), cancellationToken);
             string exGreeting = "For eksempel:";
             turnContext.SendActivityAsync(MessageFactory.Text(exGreeting, exGreeting, InputHints.AcceptingInput), cancellationToken);
-            string whoIsGreeting = "Fortell meg om en kvinne innen vitenskap fra Norge.";
+            string whoIsGreeting = "Definer algebra.";
             turnContext.SendActivityAsync(MessageFactory.Text(whoIsGreeting, whoIsGreeting, InputHints.AcceptingInput), cancellationToken);
-            string whatPlaceGreeting = "Fortell meg om en viktig mur i Tyskland.";
+            string whatPlaceGreeting = "Fortell meg om berlinmuren.";
             turnContext.SendActivityAsync(MessageFactory.Text(whatPlaceGreeting, whatPlaceGreeting, InputHints.AcceptingInput), cancellationToken);
+            string whoWasGreeting = "Hvem var Edvard Munch";
+            turnContext.SendActivityAsync(MessageFactory.Text(whoWasGreeting, whatPlaceGreeting, InputHints.AcceptingInput), cancellationToken);
 
             return base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
         }
