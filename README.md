@@ -3,6 +3,7 @@
 Dette programmet er en chatbot. Programmet lar brukeren søke og bla i [Store Norske Leksikon](https://snl.no/). Programmet er laget for opplæring og undervisning. Ved å følge oppskriften under lærer du [Microsoft LUIS](https://www.luis.ai/home) og [Microsoft Bot Framework](https://dev.botframework.com/)
 Oppskriften er ment å ta fra 1 til 2 timer.
 Etter oppskriften har du laget din første chatbot og testet den i botsimulatoren.
+
 ## Forutsetninger
 
 Noen ting må være på plass din PC eller Mac før vi kan begynne
@@ -13,19 +14,35 @@ Noen ting må være på plass din PC eller Mac før vi kan begynne
   # bestem dotnet versjon
   dotnet --version
   ```
+
 - [git](https://www.git-scm.com/)
 - [Microsoft Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
 
 ## Oppskrift
 
 Før vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften [Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started).
+For å komme i gang med bot framework emulator trenger du programmet **ngrok**. Installasjon av ngrok varierer på forskjellige systemer.
+For MacOS gjør som i skriptet under. Installasjonen krever [homebrew](https://brew.sh)
 
+```bash
+username$ brew cask install ngrok
+==> Satisfying dependencies
+==> Downloading https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip
+######################################################################## 100.0%
+==> No SHA-256 checksum defined for Cask 'ngrok', skipping verification.
+==> Installing Cask ngrok
+==> Linking Binary 'ngrok' to '/usr/local/bin/ngrok'.
+🍺  ngrok was successfully installed!
+username$ which ngrok
+/usr/local/bin/ngrok
+```
 
 - I terminalen git klon [Microsoft BotBuilder Samples](https://github.com/microsoft/BotBuilder-Samples)
 
     ```bash
     git clone https://github.com/Microsoft/botbuilder-samples.git
     ```
+
 - naviger til `samples/csharp_dotnetcore/05.multi-turn-prompt`
 - kopier filene i denne mappen til en ny mappe. Kall denne mappen `EncyclopediaBot`.
 - Naviger til denne nye mappen EncyclopediaBot. Kjør boten fra terminalen eller fra Visual Studio. Velg alternativ A eller B.
@@ -70,6 +87,7 @@ Lukk simulatoren når du er ferdig.
 11. Åpne EncyclopediaBot.Web og legg til en ny mappe `Dialogs` og slipp filene koden fra [github Dialogs/](https://github.com/vippsas/encyclopediabot-demo/tree/master/EncyclopediaBot.Web/Dialogs) inn i din nye mappe.
 12. Åpne EncyclopediaBot.Web og legg til en ny mappe `Model` og slipp filene koden fra [github Model/](https://github.com/vippsas/encyclopediabot-demo/tree/master/EncyclopediaBot.Web/Model) inn i din nye mappe.
 13. Åpne klassen **DialogBot.cs** og putt inn snutten rett under konstruktøren.
+
 ```csharp
 
         #region custom
@@ -110,7 +128,9 @@ Lukk simulatoren når du er ferdig.
 
         #endregion
 ```
+
 14. I klassen **DialogBot.cs** og bytt ut innholdet i metoden **OnMessageActivityAsync** med.
+
 ```csharp
             Logger.LogInformation("Running dialog with Message Activity.");
 
@@ -146,7 +166,9 @@ Lukk simulatoren når du er ferdig.
                 }
             }
 ```
-15. Åpne filen **Startup.cs**. Legg til konstruktøren
+
+15. Åpne filen **Startup.cs**. Legg til konstruktøren under
+
 ```csharp
 #region custom
         private readonly IConfiguration Configuration;
@@ -159,6 +181,7 @@ Lukk simulatoren når du er ferdig.
 ```
 
 I bunn av metoden **ConfigureServices** putt inn
+
 ```csharp
             services.AddSingleton<Dialogs.Search.SearchDialog>();
             // configuration for LUIS
@@ -181,11 +204,12 @@ I bunn av metoden **ConfigureServices** putt inn
                 return webLogger;
             });
 ```
-16. Åpne filen **settings.json** og tre nye verdier. Disse er sensitiv informasjon, må hentes fra https://eu.luis.ai/ .
+
+16. Åpne filen **settings.json** og tre nye verdier. Disse er sensitiv informasjon, må hentes fra [https://eu.luis.ai/](https://eu.luis.ai/) .
 17. Kopier filen [BotHelper.cs](https://github.com/vippsas/encyclopediabot-demo/blob/master/EncyclopediaBot.Web/Bots/BotHelper.cs) inn i mappen Bots i Encyclopedia.Web.
 18. Start prosjektet i Visual Studio med `F5`. Debug prosjektet i visual studio og observer hva som skjer.
 
-Så du det? Hver gang du kommer til en Dialog, og spørsmål (ChoicePrompt) i **UserProfileDialog.cs** eller **SearchDialog.cs** dukker opp, så slutter samtalen. Årsaken er at alle meldinger går gjennom [OnMessageActivityAsync](https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.activityhandler.onmessageactivityasync?view=botbuilder-dotnet-stable). Den nye LUIS-implementasjonen vi laget i steg 14 bestemmer hvilken dialog som styrer samtalen. Oppførselen føles som samtalen "faller ut".
+Så du det? Hver gang du kommer til en Dialog, og spørsmål [ChoicePrompt](https://docs.microsoft.com/en-us/javascript/api/botbuilder-dialogs/choiceprompt?view=botbuilder-ts-latest) i **UserProfileDialog.cs** eller **SearchDialog.cs** dukker opp, så slutter samtalen. Årsaken er at alle meldinger går gjennom [OnMessageActivityAsync](https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.activityhandler.onmessageactivityasync?view=botbuilder-dotnet-stable). Den nye LUIS-implementasjonen vi laget i steg 14 bestemmer hvilken dialog som styrer samtalen. Oppførselen føles som samtalen "faller ut".
 
 Løsningen er å putte alle dialoger i et [DialogSet](https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.dialogs.dialogset?view=botbuilder-dotnet-stable). Etterpå må alltid dialogen fortsettes fra OnMessageAcitivityAsync før en ny startes. Se metoden [RunAsyncWithLUISDispatcher](https://github.com/vippsas/encyclopediabot-demo/blob/dc4e75018f009885d85a566107d1ee5ca54a75a9/EncyclopediaBot.Web/Bots/DialogBot.cs#L33), og du vil se
 
@@ -196,8 +220,8 @@ Løsningen er å putte alle dialoger i et [DialogSet](https://docs.microsoft.com
                 await dialogContext.BeginDialogAsync(dialog.Id, null, cancellationToken).ConfigureAwait(false);
             }
 ```
- 
- 19. Nå retter vi feilen. Bytt ut din DialogBot.cs med [github DialogBot.cs](https://github.com/vippsas/encyclopediabot-demo/blob/master/EncyclopediaBot.Web/Bots/DialogBot.cs).
+
+19. Nå retter vi feilen. Bytt ut din DialogBot.cs med [github DialogBot.cs](https://github.com/vippsas/encyclopediabot-demo/blob/master/EncyclopediaBot.Web/Bots/DialogBot.cs).
 
 Programmet er nå ferdig. Kjører du det i simulatoren en gang til kan du stille spørsmål om alle artiklene.
 
