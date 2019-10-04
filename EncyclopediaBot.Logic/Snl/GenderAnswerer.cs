@@ -48,7 +48,7 @@ namespace EncyclopediaBot.Logic.Snl
                 }
             }
 
-            return default;
+            return Gender.None;
         }
     }
 }
