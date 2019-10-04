@@ -326,12 +326,12 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             
             IEnumerable<Answer> answersInTopic = null;
             var userChoice = stepContext.Result as FoundChoice;
-            Topic topic;
+            
             if (UserKnowsTopic(userChoice)
                 && stepContext.Values.ContainsKey(TopicsData)
                 && stepContext.Values[TopicsData] is List<Topic>)
             {
-                topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value);
+                Topic topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value);
                 if (topic != null)
                 { 
                     var answers = searchState.LastResult;
