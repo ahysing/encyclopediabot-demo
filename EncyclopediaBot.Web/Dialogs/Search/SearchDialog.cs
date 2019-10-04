@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EncyclopediaBot.Web.Dialogs.Search
 {
-    public class SearchDialog : ComponentDialog
+    public class SearchDialog : ComponentDialog, ISearchDialog
     {
         private readonly DefinitionManager _definitionManager;
         private const string UserInfo = "userinfo";
@@ -247,7 +247,7 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             // Prompt the user for a choice.)
             return await stepContext.PromptAsync(nameof(ChoicePrompt), promptOptionsChoicePrompt, cancellationToken);
         }
-        private string AnswerUndecided = "Jeg vet ikke.";
+        private string AnswerUndecided = "Jeg vet ikke";
         private async Task<DialogTurnResult> AskFollowUpTopicAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             Guid? requestId = Guid.NewGuid();
@@ -313,7 +313,7 @@ namespace EncyclopediaBot.Web.Dialogs.Search
 
         private async Task<DialogTurnResult> PaginateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            Guid requestId = Guid.NewGuid();
+            Guid requestId = RequestId ?? Guid.NewGuid();
             if (stepContext.Result is bool? && (stepContext.Result as bool?).Value == true)
             {
                 return await stepContext.NextAsync(new Nullable<bool>(true), cancellationToken);
@@ -329,12 +329,19 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             Topic topic;
             if (UserKnowsTopic(userChoice)
                 && stepContext.Values.ContainsKey(TopicsData)
-                && stepContext.Values[TopicsData] is List<Topic>
-                && (topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value)) != null)
+                && stepContext.Values[TopicsData] is List<Topic>)
             {
-                var answers = searchState.LastResult;
-                answersInTopic = FilterByTopic(answers, topic);
-                searchState.LastResult = new List<Answer>(answersInTopic);
+                topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value);
+                if (topic != null)
+                { 
+                    var answers = searchState.LastResult;
+                    answersInTopic = FilterByTopic(answers, topic);
+                    searchState.LastResult = new List<Answer>(answersInTopic);
+                }
+                else
+                {
+                    answersInTopic = searchState.LastResult;
+                }
             }
             else
             {
@@ -365,6 +372,5 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             // WaterfallStep always finishes with the end of the Waterfall or with another dialog, here it is the end.
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
-
     }
 }
