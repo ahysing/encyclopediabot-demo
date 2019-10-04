@@ -331,11 +331,11 @@ namespace EncyclopediaBot.Web.Dialogs.Search
                 && stepContext.Values.ContainsKey(TopicsData)
                 && stepContext.Values[TopicsData] is List<Topic>)
             {
-                Topic topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value);
-                if (topic != null)
+                Topic userChose = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value);
+                if (userChose != null)
                 { 
                     var answers = searchState.LastResult;
-                    answersInTopic = FilterByTopic(answers, topic);
+                    answersInTopic = FilterByTopic(answers, userChose);
                     searchState.LastResult = new List<Answer>(answersInTopic);
                 }
                 else
