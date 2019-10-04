@@ -111,7 +111,7 @@ namespace EncyclopediaBot.Web
 
             JToken firstNameToken = null;
             bool foundFirstName = recognized.Entities.TryGetValue("FirstName", out firstNameToken);
-
+            
             JToken lastNameToken = null;
             bool foundLastName = recognized.Entities.TryGetValue("LastName", out lastNameToken);
 

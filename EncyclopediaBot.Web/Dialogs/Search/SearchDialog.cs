@@ -18,6 +18,7 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         private const string TopicsData = "topics";
 
         public string Query { get; set; }
+        public Guid? RequestId { get; set; }
 
         public SearchDialog(DefinitionManager definitionManager, UserState userState) : base(nameof(SearchDialog))
         {
@@ -164,17 +165,18 @@ namespace EncyclopediaBot.Web.Dialogs.Search
 
         private async Task<DialogTurnResult> SearchStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            var requestId = Guid.NewGuid();
-            IEnumerable<Answer> answers = null;
+            var requestId = RequestId ?? Guid.NewGuid();
             Answer answer = null;
             SearchState searchState = null;
+            IEnumerable<Answer> answers;
             if (stepContext.Options is SearchState)
             {
                 searchState = stepContext.Options as SearchState;
                 if (searchState.LastResult.Any())
                 {
                     answers = searchState.LastResult;
-                } else
+                }
+                else
                 {
                     if (searchState.Limit.HasValue)
                     {
@@ -194,9 +196,11 @@ namespace EncyclopediaBot.Web.Dialogs.Search
 
                 answer = searchState.LastResult.FirstOrDefault();
                 searchState.ArticleInFocus = new ArticleId { Id = answer.Id, Source = answer.Source };
-            } else
+            }
+            else
             {
-                answers = _definitionManager.GetAnswer(Query, requestId: requestId);
+                uint limit = 7;
+                answers = _definitionManager.GetAnswer(Query, limit: limit, requestId: requestId);
                 var lastResult = new List<Answer>(answers);
                 if (lastResult.Any())
                 {
@@ -243,48 +247,41 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             // Prompt the user for a choice.)
             return await stepContext.PromptAsync(nameof(ChoicePrompt), promptOptionsChoicePrompt, cancellationToken);
         }
-
+        private string AnswerUndecided = "Jeg vet ikke.";
         private async Task<DialogTurnResult> AskFollowUpTopicAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
             Guid? requestId = Guid.NewGuid();
             var searchState = stepContext.Values[UserInfo] as SearchState;
 
             var userAnswered = ((FoundChoice)stepContext.Result).Value ?? string.Empty;
-            if (userAnswered == "nei")
+            if ("nei".Equals(userAnswered, StringComparison.CurrentCulture))
             {
-                if (searchState != null
-                && searchState.LastResult != null
-                && searchState.LastResult.Any())
-                { 
-                    var articleInFocus = searchState.ArticleInFocus;
-                    PutDownVote(searchState, articleInFocus);
+                var articleInFocus = searchState.ArticleInFocus;
+                PutDownVote(searchState, articleInFocus);
 
-                    searchState.DiscardedArticles.Add(articleInFocus);
-                    searchState.LastResult.RemoveAll(a => a.Id == searchState.ArticleInFocus.Id && a.Source == searchState.ArticleInFocus.Source);
+                searchState.DiscardedArticles.Add(articleInFocus);
+                searchState.LastResult.RemoveAll(a => a.Id == searchState.ArticleInFocus.Id && a.Source == searchState.ArticleInFocus.Source);
 
-                    stepContext.Values[UserInfo] = searchState;
-                    if (searchState.LastResult.Any())
+                stepContext.Values[UserInfo] = searchState;
+                if (searchState.LastResult.Any())
+                {
+                    var topics = FetchTopics(searchState.LastResult, requestId);
+                    stepContext.Values[TopicsData] = topics;
+                    if (topics.Count > 1)
                     {
-                        var topics = FetchTopics(searchState.LastResult, requestId);
-                        stepContext.Values[TopicsData] = topics;
-                        if (topics.Count > 1)
+                        var choices = topics.Select(t => t.Name).ToList();
+                        choices.Add(AnswerUndecided);
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("Ok. Jeg trenger litt fler detaljer for å kunne besvare det spørsmålet."), cancellationToken);
+                        var choicePromptOptions = new PromptOptions
                         {
-                            await stepContext.Context.SendActivityAsync(MessageFactory.Text("Ok. Jeg trenger litt fler detaljer for å kunne besvare det spørsmålet."), cancellationToken);
-                            var choicePromptOptions = new PromptOptions
-                            {
-                                Prompt = MessageFactory.Text("Hvilket emne snakker vi om?"),
-                                RetryPrompt = MessageFactory.Text("Vi er nødt til å holde oss til temaet. Vennligst velg det relevante emnet for det du leter etter."),
-                                Choices = ChoiceFactory.ToChoices(topics.Select(t => t.Name).ToList())
-                            };
+                            Prompt = MessageFactory.Text("Hvilket emne snakker vi om?"),
+                            RetryPrompt = MessageFactory.Text("Vi er nødt til å holde oss til temaet. Vennligst velg det relevante emnet for det du leter etter."),
+                            Choices = ChoiceFactory.ToChoices(choices)
+                        };
 
-                            return await stepContext.PromptAsync(nameof(ChoicePrompt), choicePromptOptions, cancellationToken);
-                        }
-                        else
-                        {
-                            stepContext.Values[TopicsData] = new List<Topic>(0);
-                            return await stepContext.NextAsync(null, cancellationToken);
-                        }
-                    } else
+                        return await stepContext.PromptAsync(nameof(ChoicePrompt), choicePromptOptions, cancellationToken);
+                    }
+                    else
                     {
                         stepContext.Values[TopicsData] = new List<Topic>(0);
                         return await stepContext.NextAsync(null, cancellationToken);
@@ -294,9 +291,10 @@ namespace EncyclopediaBot.Web.Dialogs.Search
                     stepContext.Values[TopicsData] = new List<Topic>(0);
                     return await stepContext.NextAsync(null, cancellationToken);
                 }
-            }else if (userAnswered == "ja")
+            } else if ("ja".Equals(userAnswered, StringComparison.CurrentCulture))
             {
                 var articleInFocus = searchState.ArticleInFocus;
+        
                 PutUpVote(searchState, articleInFocus);
                 stepContext.Values[UserInfo] = searchState;
                 return await stepContext.NextAsync(new Nullable<bool>(true), cancellationToken);
@@ -304,9 +302,13 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             else
             {
                 await stepContext.Context.SendActivityAsync(MessageFactory.Text("Vi mistet tråden her. La oss snakke om noe annet"), cancellationToken);
-
                 return await stepContext.EndDialogAsync(searchState, cancellationToken);
             }
+        }
+
+        private bool UserKnowsTopic(FoundChoice userChoice)
+        {
+            return AnswerUndecided.Equals(userChoice.Value) == false;
         }
 
         private async Task<DialogTurnResult> PaginateStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
@@ -325,7 +327,8 @@ namespace EncyclopediaBot.Web.Dialogs.Search
             IEnumerable<Answer> answersInTopic = null;
             var userChoice = stepContext.Result as FoundChoice;
             Topic topic;
-            if (stepContext.Values.ContainsKey(TopicsData)
+            if (UserKnowsTopic(userChoice)
+                && stepContext.Values.ContainsKey(TopicsData)
                 && stepContext.Values[TopicsData] is List<Topic>
                 && (topic = (stepContext.Values[TopicsData] as List<Topic>).FirstOrDefault(topic => topic.Name == userChoice.Value)) != null)
             {

@@ -18,7 +18,7 @@ namespace EncyclopediaBot.Web
             if (requestId != null)
             {
 
-                _logger.LogDebug(string.Format("{0}, {1}", requestId.Value.ToString(), message));
+                _logger.LogDebug(string.Format("RequestId: {0}, {1}", requestId.Value.ToString(), message));
             }
             else
             {
@@ -31,7 +31,7 @@ namespace EncyclopediaBot.Web
             if (requestId != null)
             {
 
-                _logger.LogCritical(string.Format("{0}, {1}", requestId.Value.ToString(), message));
+                _logger.LogCritical(string.Format("RequestId: {0}, {1}", requestId.Value.ToString(), message));
             }
             else
             {
@@ -44,7 +44,7 @@ namespace EncyclopediaBot.Web
             if (requestId != null)
             {
 
-                _logger.LogError(string.Format("{0}, {1}", requestId.Value.ToString(), message));
+                _logger.LogError(string.Format("RequestId: {0}, {1}", requestId.Value.ToString(), message));
             }
             else
             {
@@ -57,7 +57,7 @@ namespace EncyclopediaBot.Web
             if (requestId != null)
             {
 
-                _logger.LogInformation(string.Format("{0}, {1}", requestId.Value.ToString(), message));
+                _logger.LogInformation(string.Format("RequestId: {0}, {1}", requestId.Value.ToString(), message));
             }
             else
             {
@@ -70,7 +70,7 @@ namespace EncyclopediaBot.Web
             if (requestId != null)
             {
 
-                _logger.LogWarning(string.Format("{0}, {1}", requestId.Value.ToString(), message));
+                _logger.LogWarning(string.Format("RequestId: {0}, {1}", requestId.Value.ToString(), message));
             }
             else
             {
