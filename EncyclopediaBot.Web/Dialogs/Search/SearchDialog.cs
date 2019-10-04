@@ -45,7 +45,7 @@ namespace EncyclopediaBot.Web.Dialogs.Search
         #region logic
         private uint CountAnswers(IEnumerable<Answer> answers)
         {
-            uint Limit = default;
+            uint Limit = 0;
             foreach (var _ in answers) { Limit++; }
             return Limit;
         }
