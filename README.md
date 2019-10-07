@@ -116,11 +116,11 @@ Lukk simulatoren når du er ferdig.
             var promptMessage = MessageFactory.Text(greeting, greeting, InputHints.IgnoringInput);
             turnContext.SendActivityAsync(promptMessage, cancellationToken);
 
-            string describeGreeting = "Jeg kan vare på spørsmål om kjente personer, steder eller historiske hendelser.";
+            string describeGreeting = "Jeg kan svare på spørsmål om kjente personer, steder eller historiske hendelser.";
             turnContext.SendActivityAsync(MessageFactory.Text(describeGreeting, describeGreeting, InputHints.AcceptingInput), cancellationToken);
-            string exGreeting = "For eksempel:";
+            string exGreeting = "For eksempel";
             turnContext.SendActivityAsync(MessageFactory.Text(exGreeting, exGreeting, InputHints.AcceptingInput), cancellationToken);
-            string whoIsGreeting = "Fortell meg om en kvinne innen vitenskap fra Norge.";
+            string whoIsGreeting = "Definer algebra.";
             turnContext.SendActivityAsync(MessageFactory.Text(whoIsGreeting, whoIsGreeting, InputHints.AcceptingInput), cancellationToken);
             string whatPlaceGreeting = "Fortell meg om en viktig mur i Tyskland.";
             turnContext.SendActivityAsync(MessageFactory.Text(whatPlaceGreeting, whatPlaceGreeting, InputHints.AcceptingInput), cancellationToken);
