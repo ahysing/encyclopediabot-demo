@@ -20,7 +20,7 @@ Noen ting må være på plass din PC eller Mac før vi kan begynne
 
 ## Oppskrift
 
-F√∏r vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften 
+Før vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften 
 [Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started). Microsoft refererer til programmet **ngrok** under installasjonen. For v√•rt form√•l trenger vi det ikke. Derfor anbefales det å **IKKE INSTALLERE NGROK**.
 Etter installasjon skal Bot framework settings bør inneholde
 
