@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Bot.Builder.AI.Luis;
 using System.Collections.Generic;
 using EncyclopediaBot.Web.Dialogs.Search;
+using System;
 
 namespace EncyclopediaBot.Web
 {
@@ -101,15 +102,15 @@ namespace EncyclopediaBot.Web
             var promptMessage = MessageFactory.Text(greeting, greeting, InputHints.IgnoringInput);
             turnContext.SendActivityAsync(promptMessage, cancellationToken);
 
-            string describeGreeting = "Jeg kan vare på spørsmål om kjente personer, steder eller historiske hendelser.";
+            string describeGreeting = "Jeg kan svare på spørsmål om kjente personer, steder eller historiske hendelser.";
             turnContext.SendActivityAsync(MessageFactory.Text(describeGreeting, describeGreeting, InputHints.AcceptingInput), cancellationToken);
-            string exGreeting = "For eksempel:";
+            string exGreeting = "For eksempel";
             turnContext.SendActivityAsync(MessageFactory.Text(exGreeting, exGreeting, InputHints.AcceptingInput), cancellationToken);
             string whoIsGreeting = "Definer algebra.";
             turnContext.SendActivityAsync(MessageFactory.Text(whoIsGreeting, whoIsGreeting, InputHints.AcceptingInput), cancellationToken);
             string whatPlaceGreeting = "Fortell meg om berlinmuren.";
             turnContext.SendActivityAsync(MessageFactory.Text(whatPlaceGreeting, whatPlaceGreeting, InputHints.AcceptingInput), cancellationToken);
-            string whoWasGreeting = "Hvem var Edvard Munch";
+            string whoWasGreeting = "Hvem var Edvard Munch?";
             turnContext.SendActivityAsync(MessageFactory.Text(whoWasGreeting, whatPlaceGreeting, InputHints.AcceptingInput), cancellationToken);
 
             return base.OnMembersAddedAsync(membersAdded, turnContext, cancellationToken);
@@ -127,7 +128,8 @@ namespace EncyclopediaBot.Web
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            Logger.LogInformation("Running dialog with Message Activity.");
+            Guid requestId = Guid.NewGuid();
+            Logger.LogInformation($"RequestId: {requestId}, Running dialog with Message Activity.");
 
             if (!IsConfigured) { SetupLUIS(); }
 
@@ -141,11 +143,12 @@ namespace EncyclopediaBot.Web
                 {
                     case "Define":
                         {
-
                             string query = new BotHelper().GetQuery(recognized);
                             if (!string.IsNullOrWhiteSpace(query))
                             {
+                                Logger.LogInformation($"RequestId: {requestId}, Query: {query}");
                                 _searchDialog.Query = query;
+                                _searchDialog.RequestId = requestId;
                                 await _searchDialog.RunAsyncWithLUISDispatcher(turnContext, dialogState, cancellationToken, Dialog);
                             }
                             else

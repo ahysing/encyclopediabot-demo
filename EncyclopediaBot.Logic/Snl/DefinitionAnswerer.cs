@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EncyclopediaBot.Logic.Snl
@@ -190,7 +191,7 @@ namespace EncyclopediaBot.Logic.Snl
             return null;
         }
 
-        public string GetArticleWord(string headword, string bodyPlainText)
+        public string GetDeterminerWord(string headword, string bodyPlainText)
         {
             string verbInFocus = DetectVerbInFocus(headword, bodyPlainText);
             if (IsProbablyVerb(verbInFocus) == false)
@@ -211,13 +212,6 @@ namespace EncyclopediaBot.Logic.Snl
                 {
                     int suffixAt = wordAt + verbInFocusStemmed.Length;
                     int suffixLength = nextSpace - wordAt - verbInFocusStemmed.Length;
-                    if (_logger != null && wordAt - 50 > 0)
-                    {
-                        string snippet = bodyPlainText.Substring(wordAt - 50, suffixLength + 50);
-                        string message = string.Format("Found Article Word at {0}", snippet);
-                        _logger.Debug(message, RequestId);
-                    }
-
                     if (suffixLength > 0)
                     {
                         string suffix = bodyPlainText.Substring(suffixAt, suffixLength).ToLower();
@@ -242,6 +236,12 @@ namespace EncyclopediaBot.Logic.Snl
                 }
             }
 
+            if (_logger != null)
+            {
+                string message = Summerise(verbInFocus, numberOfSuffixesInFocus);
+                _logger.Debug(message, RequestId);
+            }
+
             while (numberOfSuffixesInFocus.Count > 0)
             {
                 string suffix = numberOfSuffixesInFocus.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
@@ -260,6 +260,26 @@ namespace EncyclopediaBot.Logic.Snl
             }
 
             return string.Empty;
+        }
+
+        private string Summerise(string verbInFocus, Dictionary<string, uint> numberOfSuffixesInFocus)
+        {
+            StringBuilder summaryBuilder = new StringBuilder();
+            summaryBuilder.Append("Found head word \"");
+            summaryBuilder.Append(verbInFocus);
+            summaryBuilder.Append("\" suffix to determine the determiner:\n");
+            foreach (var item in numberOfSuffixesInFocus.Where(item => item.Value > 1))
+            {
+                summaryBuilder.Append(item.Key);
+                summaryBuilder.Append(':');
+                summaryBuilder.Append(' ');
+                summaryBuilder.Append(item.Value);
+                summaryBuilder.Append(Environment.NewLine);
+            }
+
+            summaryBuilder.Append(Environment.NewLine);
+            string message = summaryBuilder.ToString();
+            return message;
         }
 
         private bool IsProbablyVerb(string verbInFocus)
@@ -292,7 +312,7 @@ namespace EncyclopediaBot.Logic.Snl
             string verb = (subjectStillExists ? "er" : "var");
 
             // article are words used together with nouns. In Norwegian the articles are "en", "ei", "et"
-            string articleWord = GetArticleWord(headWordOrTitle, bodyPlainText);
+            string articleWord = GetDeterminerWord(headWordOrTitle, bodyPlainText);
 
             int firstSentanceEndIdx = ingress.IndexOfAny(new char[] { '.', '!', '?' });
             int headWordAt = ingress.IndexOf(headWordOrTitle, 0, firstSentanceEndIdx, StringComparison.CurrentCultureIgnoreCase);
