@@ -7,6 +7,7 @@ The tutorial shoud tabe between one and two hours.
 When you finish this tutorial you will have made your first chatbot and have testet it in the Microsoft Chat Bot Emulator.
 
 ## Prerequisites
+
 Le's start developing. But some things must be in place before we can start. Please install the software listed beloww
 
 - [.NET Core SDK](https://dotnet.microsoft.com/download) version 2.1
@@ -22,6 +23,7 @@ Test the install with the following command in the terminal (command prompt)
 - [Microsoft Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
 
 ## Steps
+
 Before we start developing install [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2). Follow the recepie on [Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started). Microsoft are refering to **ngrok** during the installation process. For our purpose we don't need this featur. Therfore it is not recommended to intall ngrok.
 After the install please set up the Bot Emulator - Settings as listed in the table below.
 
@@ -33,12 +35,12 @@ After the install please set up the Bot Emulator - Settings as listed in the tab
 | localhost override                    | localhost |
 | Locale                                | nb-NO     |
 
-![Bot framework settings]((/documentation/bot%20framework%20settings.png)
+![Bot framework settings](/documentation/bot%20framework%20settings.png)
 
 ### Import the LUIS-model
 
 Download the LUIS model from  [EncyclopediaBot.json](https://github.com/vippsas/encyclopediabot-demo/tree/master/LUIS/EncyclopediaBot.json). Upload this model on [eu.luis.ai](https://eu.luis.ai): Log in with your microsoft account and uplodad the model from a JSON-file. Use the Import New button in the menus. (see picture below)
-![LUIS Import App]((/documentation/import-LUIS-model.png
+![LUIS Import App](/documentation/import-LUIS-model.png
 
 - In the terminal git clone [Microsoft BotBuilder Samples](https://github.com/microsoft/BotBuilder-Samples)
 
@@ -65,14 +67,14 @@ Download the LUIS model from  [EncyclopediaBot.json](https://github.com/vippsas/
   - Choose the  `MultiTurnPromptBot.csproj`-file
   - Press `F5`  to run the project
   
-  ### Test the project in Bot Framework Emulator
+### Test the project in Bot Framework Emulator
 
 - Start Bot Framework Emulator
 - File -> Open Bot
 - Input connection URL `http://localhost:3978/api/messages`
 
 Si "hei" to the bot, and at will start asking you questions about transport.
-![startprosjektet i simulatoren]((/documentation/v0.png)
+![startprosjektet i simulatoren](/documentation/v0.png)
 Close the emulator when you are done.
 
 ## Oppdater Prosjektet
@@ -170,6 +172,7 @@ This code presents our users with nice welcome message as he or she logs in to t
                 }
             }
 ```
+
 This allows LUIS to recognise all messages from the user as an intent with, or without keywords.
 
 15. Open **Startup.cs**. Add a new constructor.
@@ -184,6 +187,7 @@ This allows LUIS to recognise all messages from the user as an intent with, or w
         }
 #endregion
 ```
+
 This way we can read configuration values right out of **settings.json** upon start up.
 
 In the bottom of method **ConfigureServices** put
@@ -220,6 +224,7 @@ Luis ha a concept of a Subscription keys. The snippet above reads those from set
 Did you notice what happened? Every time you enter a conversation with your bot (via a class SearchDialog.cs), and a question appears from class [ChoicePrompt](https://docs.microsoft.com/en-us/javascript/api/botbuilder-dialogs/choiceprompt?view=botbuilder-ts-latest) the conversation comes to a halt. You are brought back to the beginning. This is because all messages pass through [OnMessageActivityAsync](https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.activityhandler.onmessageactivityasync?view=botbuilder-dotnet-stable). The new implementeation, with LUS, we added at step 14 decides what conversation we are running. The result is that all conversations "terminates".
 
 The solution is to put all dialogs in a  [DialogSet](https://docs.microsoft.com/en-us/dotnet/api/microsoft.bot.builder.dialogs.dialogset?view=botbuilder-dotnet-stable). Then from OnMessageAcitivityAsync all dialoges must be continued before we can create a new one. See method [RunAsyncWithLUISDispatcher](https://github.com/vippsas/encyclopediabot-demo/blob/dc4e75018f009885d85a566107d1ee5ca54a75a9/EncyclopediaBot.Web/Bots/DialogBot.cs#L33), and it will show you
+
 ```csharp
             var results = await dialogContext.ContinueDialogAsync(cancellationToken).ConfigureAwait(false);
             if (results.Status == DialogTurnStatus.Empty)
@@ -233,7 +238,8 @@ The solution is to put all dialogs in a  [DialogSet](https://docs.microsoft.com/
 Your program is now finished. Give it a test run in the emulator and ask it questions in norwegian about all the articles.
 
 Examples are
+
 * Definer Algebra.
 * Hvem er Bill Gates?
 
-![A finished bot]((/documentation/final.png)
+![A finished bot](/documentation/final.png)
