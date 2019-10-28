@@ -1,4 +1,5 @@
 # Leksikon Bot
+*THIS ARTICLE HAS BEEN TRANSLATED TO ENGLISH. FOR THE ENGLISH VERSION PLEASE VISIT (/documentaton/README-en.md)*
 
 Dette programmet er en chatbot. Programmet lar brukeren søke og bla i [Store Norske Leksikon](https://snl.no/). Programmet er laget for opplæring og undervisning. Ved å følge oppskriften under lærer du [Microsoft LUIS](https://www.luis.ai/home) og [Microsoft Bot Framework](https://dev.botframework.com/)
 Oppskriften er ment å ta fra 1 til 2 timer.
@@ -21,7 +22,7 @@ Noen ting må være på plass din PC eller Mac før vi kan begynne
 ## Oppskrift
 
 Før vi starter installer [Bot Framework Emulator 4.5.2](https://github.com/microsoft/BotFramework-Emulator/releases/tag/v4.5.2) etter oppskriften 
-[Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started). Microsoft refererer til programmet **ngrok** under installasjonen. For v√•rt form√•l trenger vi det ikke. Derfor anbefales det å **IKKE INSTALLERE NGROK**.
+[Getting Started](https://github.com/Microsoft/BotFramework-Emulator/wiki/Getting-Started). Microsoft refererer til programmet **ngrok** under installasjonen. For våt formål trenger vi det ikke. Derfor anbefales det å **IKKE INSTALLERE NGROK**.
 Etter installasjon skal Bot framework settings bør inneholde
 
 | Alternativ                            | Verdi     |
