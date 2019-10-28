@@ -1,5 +1,5 @@
 # Leksikon Bot
-*THIS ARTICLE HAS BEEN TRANSLATED TO ENGLISH. FOR THE ENGLISH VERSION PLEASE VISIT [The english README.md](/documentaton/README-en.md)*
+*THIS ARTICLE HAS BEEN TRANSLATED TO ENGLISH. FOR THE ENGLISH VERSION PLEASE VISIT [The english README.md](/documentation/README-en.md)*
 
 Dette programmet er en chatbot. Programmet lar brukeren søke og bla i [Store Norske Leksikon](https://snl.no/). Programmet er laget for opplæring og undervisning. Ved å følge oppskriften under lærer du [Microsoft LUIS](https://www.luis.ai/home) og [Microsoft Bot Framework](https://dev.botframework.com/)
 Oppskriften er ment å ta fra 1 til 2 timer.

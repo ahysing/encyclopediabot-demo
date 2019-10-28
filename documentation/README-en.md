@@ -2,7 +2,7 @@
 
 *THIS ARTICLE WAS ORIGINALLY WRITTEN IN NORWEGIAN. FOR THE NORWEGIAN VERSION PLEASE VISIT [ahysing / encyclopediabot-demo](http://github.com/ahysing/encyclopediabot-demo)*
 
-This software is a chatbot. It enables the user to search and browse the norwegian encyclopedia [ [Store Norske Leksikon](https://snl.no/). The program is made for educational purposes. By following this tutorial you will learn to use [Microsoft LUIS](https://www.luis.ai/home) and [Microsoft Bot Framework](https://dev.botframework.com/)
+This software is a chatbot. It enables the user to search and browse the norwegian encyclopedia [Store Norske Leksikon](https://snl.no/). The program is made for educational purposes. By following this tutorial you will learn to use [Microsoft LUIS](https://www.luis.ai/home) and [Microsoft Bot Framework](https://dev.botframework.com/)
 The tutorial shoud tabe between one and two hours.
 When you finish this tutorial you will have made your first chatbot and have testet it in the Microsoft Chat Bot Emulator.
 
