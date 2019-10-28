@@ -1,6 +1,6 @@
 # Encyclopedia Bot
 
-*THIS ARTICLE WAS ORIGINALLY WRITTEN IN NORWEGIAN. FOR THE NORWEGIAN VERSION PLEASE VISIT (http://github.com/ahysing/encyclopediabot-demo)*
+*THIS ARTICLE WAS ORIGINALLY WRITTEN IN NORWEGIAN. FOR THE NORWEGIAN VERSION PLEASE VISIT [ahysing / encyclopediabot-demo](http://github.com/ahysing/encyclopediabot-demo)*
 
 This software is a chatbot. It enables the user to search and browse the norwegian encyclopedia [ [Store Norske Leksikon](https://snl.no/). The program is made for educational purposes. By following this tutorial you will learn to use [Microsoft LUIS](https://www.luis.ai/home) and [Microsoft Bot Framework](https://dev.botframework.com/)
 The tutorial shoud tabe between one and two hours.
@@ -33,12 +33,12 @@ After the install please set up the Bot Emulator - Settings as listed in the tab
 | localhost override                    | localhost |
 | Locale                                | nb-NO     |
 
-![Bot framework settings](/bot%20framework%20settings.png)
+![Bot framework settings]((/documentation/bot%20framework%20settings.png)
 
 ### Import the LUIS-model
 
 Download the LUIS model from  [EncyclopediaBot.json](https://github.com/vippsas/encyclopediabot-demo/tree/master/LUIS/EncyclopediaBot.json). Upload this model on [eu.luis.ai](https://eu.luis.ai): Log in with your microsoft account and uplodad the model from a JSON-file. Use the Import New button in the menus. (see picture below)
-![LUIS Import App](/import-LUIS-model.png
+![LUIS Import App]((/documentation/import-LUIS-model.png
 
 - In the terminal git clone [Microsoft BotBuilder Samples](https://github.com/microsoft/BotBuilder-Samples)
 
@@ -72,7 +72,7 @@ Download the LUIS model from  [EncyclopediaBot.json](https://github.com/vippsas/
 - Input connection URL `http://localhost:3978/api/messages`
 
 Si "hei" to the bot, and at will start asking you questions about transport.
-![startprosjektet i simulatoren](/v0.png)
+![startprosjektet i simulatoren]((/documentation/v0.png)
 Close the emulator when you are done.
 
 ## Oppdater Prosjektet
@@ -236,4 +236,4 @@ Examples are
 * Definer Algebra.
 * Hvem er Bill Gates?
 
-![A finished bot](/final.png)
+![A finished bot]((/documentation/final.png)

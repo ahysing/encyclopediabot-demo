@@ -1,5 +1,5 @@
 # Leksikon Bot
-*THIS ARTICLE HAS BEEN TRANSLATED TO ENGLISH. FOR THE ENGLISH VERSION PLEASE VISIT (/documentaton/README-en.md)*
+*THIS ARTICLE HAS BEEN TRANSLATED TO ENGLISH. FOR THE ENGLISH VERSION PLEASE VISIT [The english README.md](/documentaton/README-en.md)*
 
 Dette programmet er en chatbot. Programmet lar brukeren søke og bla i [Store Norske Leksikon](https://snl.no/). Programmet er laget for opplæring og undervisning. Ved å følge oppskriften under lærer du [Microsoft LUIS](https://www.luis.ai/home) og [Microsoft Bot Framework](https://dev.botframework.com/)
 Oppskriften er ment å ta fra 1 til 2 timer.
@@ -35,7 +35,7 @@ Etter installasjon skal Bot framework settings bør inneholde
 
 ![Bot framework settings](/documentation/bot%20framework%20settings.png)
 
-## Importer LUIS-modellen
+### Importer LUIS-modellen
 
 Last ned en eksportert modell fra [EncyclopediaBot.json](https://github.com/vippsas/encyclopediabot-demo/tree/master/LUIS/EncyclopediaBot.json). Last opp denne modellen p√• [eu.luis.ai](https://eu.luis.ai): logg inn med en Microsoft bruker, og last opp JSON-filen fra Import New menyen
 ![LUIS Import App](/documentation/import-LUIS-model.png
@@ -65,7 +65,7 @@ Last ned en eksportert modell fra [EncyclopediaBot.json](https://github.com/vipp
   - Velg `MultiTurnPromptBot.csproj` filen
   - Trykk `F5` for å kjøre prosjektet
 
-## Test prosjektet i Bot Framework Emulator
+### Test prosjektet i Bot Framework Emulator
 
 - Åpne Bot Framework Emulator
 - File -> Open Bot
@@ -75,7 +75,7 @@ Si "hei" til boten, og den vil begynne å stille deg spørsmål om transport.
 ![startprosjektet i simulatoren](/documentation/v0.png)
 Lukk simulatoren når du er ferdig.
 
-## Oppdater Prosjektet
+### Oppdater Prosjektet
 
 1. Hvis `MultiTurnPromptBot.sln` finnes i allerede hopp over dette steget. Åpne MultiTurnPromptBot.csproj i Visual Studio og kjør prosjektet. En ny Visual Studio Solution dukker opp i mappen med davn.
 2. Bytt navn på Visual Studio Solution-filen fra `MultiTurnPromptBot.sln` til `EncyclopediaBot.sln`.
