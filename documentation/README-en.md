@@ -8,7 +8,7 @@ When you finish this tutorial you will have made your first chatbot and have tes
 
 ## Prerequisites
 
-Le's start developing. But some things must be in place before we can start. Please install the software listed beloww
+Le's start developing. But some things must be in place before we can start. Please install the software listed below
 
 - [.NET Core SDK](https://dotnet.microsoft.com/download) version 2.1
 
